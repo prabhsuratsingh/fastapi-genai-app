@@ -8,7 +8,11 @@ if "messages" not in st.session_state:
 
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
-        st.markdown(message["content"])
+        content = message["content"]
+        if isinstance(content, bytes):
+            st.audio(content)
+        else:
+            st.markdown(content)
 
 if prompt := st.chat_input("Write your prompt to run in this input field"):
     st.session_storage.mesages.append({
@@ -20,10 +24,11 @@ if prompt := st.chat_input("Write your prompt to run in this input field"):
         st.text(prompt)
         
     response = requests.get(
-        f"http://localhost:8000/generate/text",
+        f"http://localhost:8000/generate/audio",
         params={"prompt": prompt}
     )
     response.raise_for_status()
 
     with st.chat_message("assistant"):
-        st.markdown(response.text)
+        st.text("Here is your generated audio")
+        st.audio(response.content)

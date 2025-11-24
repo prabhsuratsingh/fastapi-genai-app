@@ -1,7 +1,9 @@
-from multiprocessing import Pipe
-from sympy import content
 import torch
 from transformers import Pipeline, pipeline
+from transformers import AutoProcessor, AutoModel, BarkProcessor, BarkModel
+import numpy as np
+from schemas import VoicePresets
+
 
 prompt = "How to set up FastAPI project?"
 system_prompt = """
@@ -54,3 +56,35 @@ def generate_text(
 
     output = predictions[0]["generated_text"].split("</s>\n<|assistant|>\n")[-1]
     return output
+
+
+def load_audio_mode() -> tuple[BarkProcessor, BarkModel]:
+    processor = AutoProcessor.from_pretrained(
+        "suno/bark-small",
+        device=device
+    )
+    model = AutoModel.from_pretrained(
+        "suno/bark-small",
+        device=device
+    )
+    return processor, model
+
+def generate_audio(
+        processor: BarkProcessor,
+        model: BarkModel,
+        prompt: str,
+        preset: VoicePresets
+) -> tuple[np.array, int]:
+    inputs = processor(
+        text=[prompt],
+        return_tensors="pt",
+        voice_preset=preset
+    )
+
+    output = model.generate(
+        **inputs,
+        do_sample=True,
+    ).cpu().numpy().squeeze()
+
+    sample_rate = model.generation_config.sample_rate
+    return output, sample_rate

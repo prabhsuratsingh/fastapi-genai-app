@@ -158,6 +158,25 @@ wheels = [
 ]
 
 [[package]]
+name = "diffusers"
+version = "0.35.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "filelock" },
+    { name = "huggingface-hub" },
+    { name = "importlib-metadata" },
+    { name = "numpy" },
+    { name = "pillow" },
+    { name = "regex" },
+    { name = "requests" },
+    { name = "safetensors" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/03/68/288ca23c7c05c73e87ffe5efffc282400ac9b017f7a9bb03883f4310ea15/diffusers-0.35.2.tar.gz", hash = "sha256:30ecd552303edfcfe1724573c3918a8462ee3ab4d529bdbd4c0045f763affded", size = 3366711, upload-time = "2025-10-15T04:05:17.213Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/2a/2e/38d9824f8c6bb048c5ba21c6d4da54c29c162a46b58b3ef907a360a76d3e/diffusers-0.35.2-py3-none-any.whl", hash = "sha256:d50d5e74fdd6dcf55e5c1d304bc52cc7c2659abd1752740d736d7b54078b4db5", size = 4121649, upload-time = "2025-10-15T04:05:14.391Z" },
+]
+
+[[package]]
 name = "fastapi"
 version = "0.121.3"
 source = { registry = "https://pypi.org/simple" }
@@ -177,7 +196,9 @@ name = "fastapi-genai"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "diffusers" },
     { name = "fastapi" },
+    { name = "pillow" },
     { name = "requests" },
     { name = "soundfile" },
     { name = "streamlit" },
@@ -188,7 +209,9 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
+    { name = "diffusers", specifier = ">=0.35.2" },
     { name = "fastapi", specifier = ">=0.121.3" },
+    { name = "pillow", specifier = ">=11.3.0" },
     { name = "requests", specifier = ">=2.28.1" },
     { name = "soundfile", specifier = ">=0.13.1" },
     { name = "streamlit", specifier = ">=1.51.0" },
@@ -322,6 +345,17 @@ version = "3.4"
 source = { registry = "https://download.pytorch.org/whl/cu124" }
 wheels = [
     { url = "https://download.pytorch.org/whl/idna-3.4-py3-none-any.whl", hash = "sha256:90b77e79eaa3eba6de819a0c442c0b4ceefc341a7a2ab77d7562bf49f425c5c2" },
+]
+
+[[package]]
+name = "importlib-metadata"
+version = "7.1.0"
+source = { registry = "https://download.pytorch.org/whl/cu124" }
+dependencies = [
+    { name = "zipp" },
+]
+wheels = [
+    { url = "https://download.pytorch.org/whl/importlib_metadata-7.1.0-py3-none-any.whl" },
 ]
 
 [[package]]
@@ -1439,4 +1473,12 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/86/eb/20b6cdf273913d0ad05a6a14aed4b9a85591c18a987a3d47f20fa13dcc47/websockets-15.0.1-cp313-cp313-win32.whl", hash = "sha256:ba9e56e8ceeeedb2e080147ba85ffcd5cd0711b89576b83784d8605a7df455fa", size = 176393, upload-time = "2025-03-05T20:02:53.814Z" },
     { url = "https://files.pythonhosted.org/packages/1b/6c/c65773d6cab416a64d191d6ee8a8b1c68a09970ea6909d16965d26bfed1e/websockets-15.0.1-cp313-cp313-win_amd64.whl", hash = "sha256:e09473f095a819042ecb2ab9465aee615bd9c2028e4ef7d933600a8401c79561", size = 176837, upload-time = "2025-03-05T20:02:55.237Z" },
     { url = "https://files.pythonhosted.org/packages/fa/a8/5b41e0da817d64113292ab1f8247140aac61cbf6cfd085d6a0fa77f4984f/websockets-15.0.1-py3-none-any.whl", hash = "sha256:f7a866fbc1e97b5c617ee4116daaa09b722101d4a3c170c787450ba409f9736f", size = 169743, upload-time = "2025-03-05T20:03:39.41Z" },
+]
+
+[[package]]
+name = "zipp"
+version = "3.19.2"
+source = { registry = "https://download.pytorch.org/whl/cu124" }
+wheels = [
+    { url = "https://download.pytorch.org/whl/zipp-3.19.2-py3-none-any.whl" },
 ]

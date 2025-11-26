@@ -1,8 +1,11 @@
+from os import pipe
 import torch
 from transformers import Pipeline, pipeline
 from transformers import AutoProcessor, AutoModel, BarkProcessor, BarkModel
+from diffusers import DiffusionPipeline, StableDiffusionInpaintPipelineLegacy
 import numpy as np
 from schemas import VoicePresets
+from PIL import Image
 
 
 prompt = "How to set up FastAPI project?"
@@ -88,3 +91,23 @@ def generate_audio(
 
     sample_rate = model.generation_config.sample_rate
     return output, sample_rate
+
+def load_iamge_model() -> StableDiffusionInpaintPipelineLegacy:
+    pipe = DiffusionPipeline.from_pretrained(
+        "segmind/tiny-sd",
+        torch_dtype=torch.float32,
+        device=device
+    )
+
+    return pipe
+
+def generate_image(
+        pip: StableDiffusionInpaintPipelineLegacy,
+        prompt: str
+) -> Image.Image:
+    output = pip(
+        prompt=prompt,
+        num_inference_steps=10
+    ).images[0]
+
+    return output

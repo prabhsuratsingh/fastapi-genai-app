@@ -1,0 +1,27 @@
+import torch
+from diffusers import DiffusionPipeline, StableDiffusionInpaintPipelineLegacy
+import numpy as np
+from PIL import Image
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+
+def load_iamge_model() -> StableDiffusionInpaintPipelineLegacy:
+    pipe = DiffusionPipeline.from_pretrained(
+        "segmind/tiny-sd",
+        torch_dtype=torch.float32,
+        device=device
+    )
+
+    return pipe
+
+def generate_image(
+        pip: StableDiffusionInpaintPipelineLegacy,
+        prompt: str
+) -> Image.Image:
+    output = pip(
+        prompt=prompt,
+        num_inference_steps=10
+    ).images[0]
+
+    return output

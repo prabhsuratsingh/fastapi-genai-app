@@ -1,113 +1,112 @@
-from os import pipe
-import torch
-from transformers import Pipeline, pipeline
-from transformers import AutoProcessor, AutoModel, BarkProcessor, BarkModel
-from diffusers import DiffusionPipeline, StableDiffusionInpaintPipelineLegacy
-import numpy as np
-from schemas import VoicePresets
-from PIL import Image
+# import torch
+# from transformers import Pipeline, pipeline
+# from transformers import AutoProcessor, AutoModel, BarkProcessor, BarkModel
+# from diffusers import DiffusionPipeline, StableDiffusionInpaintPipelineLegacy
+# import numpy as np
+# from schemas import VoicePresets
+# from PIL import Image
 
 
-prompt = "How to set up FastAPI project?"
-system_prompt = """
- Your name is FastAPI bot and you are a helpful
- chatbot responsible for teaching FastAPI to your users.
- Always respond in markdown.
- """
+# prompt = "How to set up FastAPI project?"
+# system_prompt = """
+#  Your name is FastAPI bot and you are a helpful
+#  chatbot responsible for teaching FastAPI to your users.
+#  Always respond in markdown.
+#  """
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+# device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-def load_text_model():
-    pipe = pipeline(
-        "text-generation",
-        model="TinyLlama/TinyLlama-1.1B-Chat-v1.0",
-        torch_dtype=torch.float16,
-        device=device
-    )
-    return pipe
+# def load_text_model():
+#     pipe = pipeline(
+#         "text-generation",
+#         model="TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+#         torch_dtype=torch.float16,
+#         device=device
+#     )
+#     return pipe
 
-def generate_text(
-        pipe: Pipeline,
-        prompt: str,
-        temperature: float = 0.7
-) -> str :
-    messages = [
-        {
-            "role": "system",
-            "content": system_prompt
-        },
-        {
-            "role": "user",
-            "content": prompt
-        },
-    ]
+# def generate_text(
+#         pipe: Pipeline,
+#         prompt: str,
+#         temperature: float = 0.7
+# ) -> str :
+#     messages = [
+#         {
+#             "role": "system",
+#             "content": system_prompt
+#         },
+#         {
+#             "role": "user",
+#             "content": prompt
+#         },
+#     ]
 
-    prompt = pipe.tokenizer.apply_chat_template(
-        messages,
-        tokenize=False,
-        add_generation_prompt=True
-    )
+#     prompt = pipe.tokenizer.apply_chat_template(
+#         messages,
+#         tokenize=False,
+#         add_generation_prompt=True
+#     )
 
-    predictions = pipe(
-        prompt,
-        temperature=temperature,
-        max_new_tokens=256,
-        do_sample=True,
-        top_k=50,
-        top_p=0.95
-    )
+#     predictions = pipe(
+#         prompt,
+#         temperature=temperature,
+#         max_new_tokens=256,
+#         do_sample=True,
+#         top_k=50,
+#         top_p=0.95
+#     )
 
-    output = predictions[0]["generated_text"].split("</s>\n<|assistant|>\n")[-1]
-    return output
+#     output = predictions[0]["generated_text"].split("</s>\n<|assistant|>\n")[-1]
+#     return output
 
 
-def load_audio_mode() -> tuple[BarkProcessor, BarkModel]:
-    processor = AutoProcessor.from_pretrained(
-        "suno/bark-small",
-        device=device
-    )
-    model = AutoModel.from_pretrained(
-        "suno/bark-small",
-        device=device
-    )
-    return processor, model
+# def load_audio_mode() -> tuple[BarkProcessor, BarkModel]:
+#     processor = AutoProcessor.from_pretrained(
+#         "suno/bark-small",
+#         device=device
+#     )
+#     model = AutoModel.from_pretrained(
+#         "suno/bark-small",
+#         device=device
+#     )
+#     return processor, model
 
-def generate_audio(
-        processor: BarkProcessor,
-        model: BarkModel,
-        prompt: str,
-        preset: VoicePresets
-) -> tuple[np.array, int]:
-    inputs = processor(
-        text=[prompt],
-        return_tensors="pt",
-        voice_preset=preset
-    )
+# def generate_audio(
+#         processor: BarkProcessor,
+#         model: BarkModel,
+#         prompt: str,
+#         preset: VoicePresets
+# ) -> tuple[np.array, int]:
+#     inputs = processor(
+#         text=[prompt],
+#         return_tensors="pt",
+#         voice_preset=preset
+#     )
 
-    output = model.generate(
-        **inputs,
-        do_sample=True,
-    ).cpu().numpy().squeeze()
+#     output = model.generate(
+#         **inputs,
+#         do_sample=True,
+#     ).cpu().numpy().squeeze()
 
-    sample_rate = model.generation_config.sample_rate
-    return output, sample_rate
+#     sample_rate = model.generation_config.sample_rate
+#     return output, sample_rate
 
-def load_iamge_model() -> StableDiffusionInpaintPipelineLegacy:
-    pipe = DiffusionPipeline.from_pretrained(
-        "segmind/tiny-sd",
-        torch_dtype=torch.float32,
-        device=device
-    )
+# def load_iamge_model() -> StableDiffusionInpaintPipelineLegacy:
+#     pipe = DiffusionPipeline.from_pretrained(
+#         "segmind/tiny-sd",
+#         torch_dtype=torch.float32,
+#         device=device
+#     )
 
-    return pipe
+#     return pipe
 
-def generate_image(
-        pip: StableDiffusionInpaintPipelineLegacy,
-        prompt: str
-) -> Image.Image:
-    output = pip(
-        prompt=prompt,
-        num_inference_steps=10
-    ).images[0]
+# def generate_image(
+#         pip: StableDiffusionInpaintPipelineLegacy,
+#         prompt: str
+# ) -> Image.Image:
+#     output = pip(
+#         prompt=prompt,
+#         num_inference_steps=10
+#     ).images[0]
 
-    return output
+#     return output

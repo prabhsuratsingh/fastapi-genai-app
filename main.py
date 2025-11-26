@@ -1,7 +1,8 @@
 from fastapi import FastAPI, status
 from fastapi.responses import StreamingResponse
 
-from models import load_text_model, load_audio_model, generate_text, generate_audio
+from models.text import load_text_model, generate_text
+from models.audio import load_audio_model, generate_audio
 from schemas import VoicePresets
 from utils import audio_array_to_buffer
 

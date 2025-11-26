@@ -6,7 +6,7 @@ from PIL import Image
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
-def load_iamge_model() -> StableDiffusionInpaintPipelineLegacy:
+def load_image_model() -> StableDiffusionInpaintPipelineLegacy:
     pipe = DiffusionPipeline.from_pretrained(
         "segmind/tiny-sd",
         torch_dtype=torch.float32,

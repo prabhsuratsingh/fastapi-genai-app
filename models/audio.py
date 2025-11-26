@@ -5,7 +5,7 @@ from schemas import VoicePresets
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-def load_audio_mode() -> tuple[BarkProcessor, BarkModel]:
+def load_audio_model() -> tuple[BarkProcessor, BarkModel]:
     processor = AutoProcessor.from_pretrained(
         "suno/bark-small",
         device=device
